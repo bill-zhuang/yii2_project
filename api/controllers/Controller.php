@@ -10,7 +10,7 @@ use yii\filters\auth\HttpBearerAuth;
 use yii\filters\auth\QueryParamAuth;
 use yii\helpers\ArrayHelper;
 
-class Controller extends \yii\web\Controller
+class Controller extends \yii\rest\Controller
 {
     const MSG_SUCCESS = "成功";
     const MSG_PARAM_ERR = "参数错误";
@@ -116,7 +116,7 @@ class Controller extends \yii\web\Controller
      * @param string $default
      * @return string
      */
-    public static function getJsonParam($key, $default = null)
+    public static function getRequestParam($key, $default = null)
     {
         $requestData = self::requestData();
         return array_key_exists($key, $requestData) ? $requestData[$key] : $default;
@@ -127,7 +127,7 @@ class Controller extends \yii\web\Controller
      * @param string $default
      * @return string
      */
-    public static function getJsonParamErr($key, $default = null)
+    public static function getRequestParamErr($key, $default = null)
     {
         $requestData = self::requestData();
         $value = array_key_exists($key, $requestData) ? $requestData[$key] : $default;

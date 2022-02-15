@@ -9,7 +9,7 @@ use backend\models\User;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $params array */
 
-$this->title = '操作记录管理';
+$this->title = '操作日志管理';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
     'responsiveWrap' => false,
     'panel' => [
         'heading' => '<h3 class="panel-title">' . $this->title . '</h3>',
-        'type' => 'default',
+        'type' => 'danger',
         'after' => false,
     ],
     'toolbar' => [

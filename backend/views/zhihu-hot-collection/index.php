@@ -17,8 +17,10 @@ $this->params['breadcrumbs'][] = $this->title;
 function getDetail(content) {
     let editor = UE.getEditor('ueid');
     editor.setContent(content);
+    //$('.modal-body').html(content);
     $('#mainModal').modal('show');
 }
+
 </script>
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
@@ -26,7 +28,7 @@ function getDetail(content) {
     'responsiveWrap' => false,
     'panel' => [
         'heading' => '<h3 class="panel-title">' . $this->title . '</h3>',
-        'type' => 'default',
+        'type' => 'info',
         'after' => false,
         //'before' =>  Html::a('新建', ['create'], ['class' => 'btn btn-success pull-left']) ,
     ],
@@ -65,25 +67,38 @@ function getDetail(content) {
             }
         ],
         [
-            'header' => '更新时间',
-            'attribute' => 'update_time',
+            'header' => '创建时间',
+            'attribute' => 'create_time',
             'hAlign' => GridView::ALIGN_CENTER,
             'vAlign' => GridView::ALIGN_MIDDLE,
         ],
         [
+            'header' => '操作',
+            'format' => 'raw',
+            'hAlign' => GridView::ALIGN_CENTER,
+            'vAlign' => GridView::ALIGN_MIDDLE,
+            'value' => function ($model) {
+                $str = preg_replace('/<figure[^>]*>/', '', $model->content);
+                $str = str_replace('</figure>', '', $str);
+                $str = json_encode($str, JSON_UNESCAPED_UNICODE);
+                return Html::button('详细',
+                    ['onclick' => "getDetail($str)", 'class' => 'btn btn-info']);
+            }
+        ],
+        /*[
             'class' => 'yii\grid\ActionColumn',
             'header' => '操作',
             'template' => '{detail}',
             'buttons' => [
                 'detail' => function($url, $model){
-                    //<figure data-size="normal"> </figure>
                     $str = preg_replace('/<figure[^>]*>/', '', $model->content);
                     $str = str_replace('</figure>', '', $str);
                     $str = json_encode($str, JSON_UNESCAPED_UNICODE);
-                    return Html::a('详细', '#', ['onclick' => "getDetail($str)"]);
+                    return Html::button('详细',
+                        ['onclick' => "getDetail($str)", 'class' => 'btn btn-info']);
                 },
             ]
-        ],
+        ],*/
     ],
     'layout' => '{items}{pager}',
     //'summary' => '', //Total xxxx items.
@@ -97,11 +112,11 @@ function getDetail(content) {
     ]
 ]); ?>
 
-<div class="modal fade" id="mainModal" tabindex="-1" role="dialog" aria-labelledby="committee-modal" aria-hidden="true">
+<div class="modal fade" id="mainModal">
     <div class="modal-dialog modal-lg" style="height:auto; width:80%;">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">详细</h4>
             </div>
             <div class="modal-body">
@@ -126,7 +141,9 @@ function getDetail(content) {
                 ?>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">关闭</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
+

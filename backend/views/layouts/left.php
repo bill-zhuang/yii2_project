@@ -3,6 +3,7 @@
 use mdm\admin\components\MenuHelper;
 use common\components\Menu;
 
+/* @var $directoryAsset false|string */
 ?>
 <aside class="main-sidebar">
 

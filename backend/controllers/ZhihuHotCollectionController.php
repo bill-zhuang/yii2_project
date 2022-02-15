@@ -14,18 +14,17 @@ use yii\filters\VerbFilter;
  */
 class ZhihuHotCollectionController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
+    public function actions()
     {
         return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
+            'upload' => [
+                'class' => 'kucha\ueditor\UEditorAction',
+                'config' => [
+                    //"imageUrlPrefix"  => "http://www.baidu.com",//图片访问路径前缀
+                    "imagePathFormat" => "/upload/image/{yyyy}{mm}{dd}/{time}{rand:6}", //上传保存路径
+                    "imageRoot" => Yii::getAlias("@webroot"),
                 ],
-            ],
+            ]
         ];
     }
 
@@ -41,6 +40,24 @@ class ZhihuHotCollectionController extends Controller
         $dataProvider->sort = false;
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'params' => $params,
+        ]);
+    }
+
+    /**
+     * Lists all ZhihuHotCollection models.
+     * @return mixed
+     */
+    public function actionIndexScroll()
+    {
+        $params = Yii::$app->request->queryParams;
+        $searchModel = new ZhihuHotCollectionSearch();
+        $dataProvider = $searchModel->search($params);
+        $dataProvider->sort = false;
+
+        return $this->render('index-scroll', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'params' => $params,

@@ -2,13 +2,13 @@
 use yii\helpers\Html;
 
 /* @var $this \yii\web\View */
-/* @var $content string */
+/* @var $directoryAsset false|string */
 ?>
 
 <header class="main-header">
     <?= Html::a('<span class="logo-mini">后</span><span class="logo-lg">后台管理</span>', '#', ['class' => 'logo']) ?>
 
-    <nav class="navbar navbar-static-top" role="navigation">
+    <nav class="navbar navbar-fixed-top" role="navigation"><!-- navbar-static-top -->
 
         <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
             <span class="sr-only">Toggle navigation</span>

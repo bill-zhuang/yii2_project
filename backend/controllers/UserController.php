@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use backend\models\SignupForm;
+use common\helpers\Utils;
 use Yii;
 use backend\models\User;
 use backend\models\Search\UserSearch;
@@ -52,16 +53,40 @@ class UserController extends Controller
      * Creates a new User model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
+     * @throws \yii\base\Exception
      */
     public function actionCreate()
     {
         $model = new SignupForm();
+        $model->isNew = true;
 
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
             return $this->redirect(['index']);
         }
 
         return $this->render('create', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * @param $id
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException
+     * @throws \yii\base\Exception
+     */
+    public function actionUpdate($id)
+    {
+        $modelUser = $this->findModel($id);
+        $model = new SignupForm();
+        $model->isNew = false;
+        if ($model->load(Yii::$app->request->post()) && $model->modifyInfo($id)) {
+            return $this->redirect(['index']);
+        } else {
+            $model->username = $modelUser->username;
+        }
+
+        return $this->render('update', [
             'model' => $model,
         ]);
     }
@@ -75,10 +100,11 @@ class UserController extends Controller
      */
     public function actionDelete($id)
     {
-        if (($model = $this->findModel($id)) !== null) {
-            $model->username = $model->username . '_'  .$model->id;
-            $model->status = User::STATUS_DELETED;
-            $model->save();
+        $model = $this->findModel($id);
+        if ($model->deleteUser()) {
+            Utils::setYiiFlash('success', '删除成功', false);
+        } else {
+            Utils::setYiiFlash('danger', '删除失败', false);
         }
 
         if (Yii::$app->request->referrer) {
@@ -92,6 +118,7 @@ class UserController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException
      * @throws \Throwable
+     * @throws \yii\base\Exception
      */
     public function actionModifyPassword()
     {
@@ -103,12 +130,10 @@ class UserController extends Controller
             $old = $postData['ModifyForm']['old-password'];
             $new = $postData['ModifyForm']['new-password'];
             if ($model->validatePassword($old)) {
-                $model->setPassword($new);
-                $model->generateAuthKey();
-                $model->generatePasswordResetToken();
-                $model->save();
-                Yii::$app->user->logout();
-                return $this->goHome();
+                if ($model->resetPassword($new)) {
+                    Yii::$app->user->logout();
+                    return $this->goHome();
+                }
             }
         }
 

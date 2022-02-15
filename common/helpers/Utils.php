@@ -6,6 +6,11 @@ use Yii;
 
 class Utils
 {
+    public static function setYiiFlash($key, $value = true, $removeAfterAccess = true)
+    {
+        Yii::$app->session->setFlash($key, $value, $removeAfterAccess);
+    }
+
     public static function makeToken($n = 32)
     {
         return Yii::$app->security->generateRandomString($n);
@@ -84,5 +89,42 @@ class Utils
         foreach ($array as $row) {
             var_dump($row['file'] . ':' . $row['line'] . '行,调用方法:' . $row['function']);
         }
+    }
+
+    public static function str2MultiArr()
+    {
+        //https://php.tutorialink.com/string-to-multidimensional-recursive-array-in-php/
+        $strs = [
+            'A_B1_C1' => 1,
+            'A_B1_C2' => 2,
+            'A_B2_C1_D3' => 3,
+            'A_B2_C1_D4' => 4,
+            'A_B2_C2' => 5,
+        ];
+        $arr = [];
+        foreach ($strs as $item => $val) {
+            $parts = explode('_', $item);
+            //$last = array_pop($parts);
+            $last = $val;
+
+            // hold a reference of to follow the path
+            $ref = &$arr;
+            foreach ($parts as $part) {
+                // maintain the reference to current path
+                $ref = &$ref[$part];
+            }
+            // finally, store the value
+            $ref = $last;
+        }
+
+        echo json_encode($arr, JSON_UNESCAPED_UNICODE);
+    }
+
+    public static function cutCertStr($key, $public = true)
+    {
+        $keyName = ($public ? 'PUBLIC' : 'PRIVATE');
+        return "-----BEGIN $keyName KEY-----\n"
+            . wordwrap($key, 64, "\n", true)
+            . "\n-----END $keyName KEY-----";
     }
 }

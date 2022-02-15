@@ -3,6 +3,8 @@
 use yii\widgets\Breadcrumbs;
 use dmstr\widgets\Alert;
 
+/* @var $directoryAsset false|string */
+/* @var $content string */
 ?>
 <div class="content-wrapper">
     <section class="content-header">
@@ -35,9 +37,3 @@ use dmstr\widgets\Alert;
         <?= $content ?>
     </section>
 </div>
-
-<footer class="main-footer">
-    <strong>Copyright &copy; <2015-<?= date('Y'); ?> </strong>> <a href="http://www.example.com/" target="_blank">example.com</a>.</strong>
-    All rights
-    reserved.
-</footer>

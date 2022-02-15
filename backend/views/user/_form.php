@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\SignupForm */
+/* @var $model backend\models\SignupForm */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -23,13 +23,16 @@ use yii\widgets\ActiveForm;
     ]); ?>
 
 
-    <?= $form->field($model, 'username')->textInput(['autofocus' => true])->label('用户名') ?>
+    <?= $form->field($model, 'username')->textInput(['autofocus' => true, 'readonly' => !empty($model->username)])->label('用户名') ?>
 
-    <?= $form->field($model, 'password')->passwordInput()->label('密码 ') ?>
+    <?php
+        $attr = ($model->isNew ? 'password' : 'modifyPassword');
+        echo $form->field($model, $attr)->passwordInput()->label('密码');
+    ?>
     <div class="col-md-2">
     </div>
     <div class="col-md-4">
-        <?= Html::submitButton('创建', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton($model->isNew ? '创建' : '保存', ['class' => 'btn btn-success']) ?>
     </div>
     <?php ActiveForm::end(); ?>
 

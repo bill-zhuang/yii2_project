@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     'responsiveWrap' => false,
     'panel' => [
         'heading' => '<h3 class="panel-title">' . $this->title . '</h3>',
-        'type' => 'default',
+        'type' => 'info',
         'after' => false,
         'before' =>  Html::a('新建', ['create'], ['class' => 'btn btn-success pull-left']) ,
     ],
@@ -90,10 +90,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'header' => '操作',
             'hAlign' => GridView::ALIGN_CENTER,
             'vAlign' => GridView::ALIGN_MIDDLE,
-            'template' => '{view} {delete}',
+            'template' => '{view} {update} {delete}',
             'buttons' => [
                 'view' => function($url, $model){
                     return Html::a('分配角色', '/admin/assignment/view?id=' . $model->id);
+                },
+                'update' => function($url, $model){
+                    return Html::a('编辑', '/user/update?id=' . $model->id);
                 },
                 'delete' => function($url, $model){
                     return Html::a('删除', ['delete', 'id' => $model->id], [

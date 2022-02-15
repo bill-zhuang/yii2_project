@@ -3,21 +3,31 @@
 namespace console\controllers;
 
 use common\models\User;
+use Yii;
 use yii\console\Controller;
 
 class TestController extends Controller
 {
-    public function actionAddAdmin()
+    public function actionGii()
     {
-        $user = new User();
-        $user->username = 'admin';
-        $user->email = 'admin@example.com';
-        $user->setPassword('123456');
-        $user->generateAuthKey();
-        $user->generateEmailVerificationToken();
-        $user->generatePasswordResetToken();
-        $user->status = User::STATUS_ACTIVE;
-        var_dump($user->save());
-    }
+        $tablePrefix = '';
+        $tableNames = [
 
+        ];
+        $params = [
+            '--tableName' => '',
+            '--ns' => 'common\\models',
+            '--modelClass' => '',
+            '--useTablePrefix' => 1,
+            '--overwrite' => 1,
+            '--generateLabelsFromComments' => 1,
+        ];
+        foreach ($tableNames as $name) {
+            $params['--tableName'] = $name;
+            $name = str_replace($tablePrefix, '', $name);
+            $modelName = $modelName = implode('', array_map('ucfirst', explode('_', $name)));
+            $params['--modelClass'] = $modelName;
+            Yii::$app->runAction('gii/model', $params);
+        }
+    }
 }

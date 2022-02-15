@@ -7,28 +7,12 @@ use backend\models\SqlLog;
 use backend\models\Search\SqlLogSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * SqlLogController implements the CRUD actions for SqlLog model.
  */
 class SqlLogController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
-
     /**
      * Lists all SqlLog models.
      * @return mixed

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model common\models\User */
+/* @var $model backend\models\SignupForm */
 
 $this->title = '创建';
 $this->params['breadcrumbs'][] = ['label' => '用户管理', 'url' => ['index']];

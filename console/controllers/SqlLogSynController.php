@@ -30,7 +30,7 @@ class SqlLogSynController extends Controller
         $handle = fopen($filePath, 'r');
         if ($handle !== false) {
             while (($buffer = fgets($handle)) !== false) {
-                if (strpos($buffer, '/yii2_project/') !== false) {
+                if (strpos($buffer, '[yii\db\Command::execute]') === false) {
                     continue;
                 }
                 $sqlTime = substr($buffer, 0 , 19); //2020-10-21 14:13:13

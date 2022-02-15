@@ -1,15 +1,16 @@
 <?php
+
 use yii\helpers\Html;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
 
 
-if (Yii::$app->controller->action->id === 'login') { 
-/**
- * Do not use this code in your template. Remove it. 
- * Instead, use the code  $this->layout = '//main-login'; in your controller.
- */
+if (Yii::$app->controller->action->id === 'login') {
+    /**
+     * Do not use this code in your template. Remove it.
+     * Instead, use the code  $this->layout = '//main-login'; in your controller.
+     */
     echo $this->render(
         'main-login',
         ['content' => $content]
@@ -18,8 +19,11 @@ if (Yii::$app->controller->action->id === 'login') {
 
     if (class_exists('backend\assets\AppAsset')) {
         backend\assets\AppAsset::register($this);
-    } elseif(class_exists('app\assets\AppAsset')) {
+    } elseif (class_exists('app\assets\AppAsset')) {
         app\assets\AppAsset::register($this);
+    }
+    if (class_exists('backend\assets\SlimScrollAsset')) {
+        backend\assets\SlimScrollAsset::register($this);
     }
     if (class_exists('backend\assets\GrowlAsset')) {
         backend\assets\GrowlAsset::register($this);
@@ -36,10 +40,10 @@ if (Yii::$app->controller->action->id === 'login') {
         <meta charset="<?= Yii::$app->charset ?>"/>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <?= Html::csrfMetaTags() ?>
-        <title>后台</title>
+        <title>Demo</title>
         <?php $this->head() ?>
     </head>
-    <body class="hold-transition skin-blue sidebar-mini">
+    <body class="hold-transition skin-blue fixed sidebar-mini"><!-- fixed 需要slimscroll.js 不然侧边栏不会滚动 -->
     <?php $this->beginBody() ?>
     <div class="wrapper">
 
@@ -57,6 +61,10 @@ if (Yii::$app->controller->action->id === 'login') {
         <?= $this->render(
             'content.php',
             ['content' => $content, 'directoryAsset' => $directoryAsset]
+        ) ?>
+
+        <?= $this->render(
+            'footer.php'
         ) ?>
 
     </div>
