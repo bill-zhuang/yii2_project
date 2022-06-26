@@ -18,6 +18,8 @@ class Utils
 
     public static function makeOrderNo($prefix = 'ORDER')
     {
+        /*$timeStr = date('YmdHis');
+        $timeStr = strval($timeStr + mt_rand(1, 10000));*/
         return $prefix . date('YmdHis') . mt_rand(10000, 99999)
             . substr(implode(null, array_map('ord',
                 str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
@@ -120,11 +122,24 @@ class Utils
         echo json_encode($arr, JSON_UNESCAPED_UNICODE);
     }
 
-    public static function cutCertStr($key, $public = true)
+    public static function generatePubPriKey()
     {
-        $keyName = ($public ? 'PUBLIC' : 'PRIVATE');
-        return "-----BEGIN $keyName KEY-----\n"
-            . wordwrap($key, 64, "\n", true)
-            . "\n-----END $keyName KEY-----";
+        $config = array(
+            //'config' => 'C:/soft/php-7.4.22/extras/ssl/openssl.cnf',//找到你的PHP目录下openssl配置文件
+            'digest_alg' => 'sha512',
+            'private_key_bits' => 1024,//指定多少位来生成私钥
+            'private_key_type' => OPENSSL_KEYTYPE_RSA
+        );
+        $res = openssl_pkey_new($config);
+        //获取私钥
+        openssl_pkey_export($res, $private_key, null, $config);
+        //获取公钥
+        $details = openssl_pkey_get_details($res);
+        $public_key = $details['key'];
+
+        return [
+            'public_key' => $public_key,
+            'private_key' => $private_key
+        ];
     }
 }
