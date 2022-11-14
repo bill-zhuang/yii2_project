@@ -5,17 +5,17 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "{{%calendar_event}}".
+ * This is the model class for table "calendar_event".
  *
- * @property integer $id id
+ * @property int $id id
  * @property string $event 事项
  * @property string $start_date 开始日期
  * @property string $start_time 开始时间
  * @property string $end_date 结束日期
  * @property string $end_time 结束时间
- * @property integer $status 1-有效；2-无效
- * @property string $create_time 创建时间
- * @property string $update_time 更新时间
+ * @property int $status 1-有效；2-无效
+ * @property string|null $create_time 创建时间
+ * @property string|null $update_time 更新时间
  */
 class CalendarEvent extends \yii\db\ActiveRecord
 {
@@ -24,7 +24,7 @@ class CalendarEvent extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%calendar_event}}';
+        return 'calendar_event';
     }
 
     /**

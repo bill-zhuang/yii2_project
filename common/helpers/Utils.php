@@ -142,4 +142,68 @@ class Utils
             'private_key' => $private_key
         ];
     }
+
+    public static function postman2Md($postmanJsonPath, $outputMdPath)
+    {
+        $path = $postmanJsonPath;
+        $json = file_get_contents($path);
+        $data = json_decode($json, true);
+        $mdFile = $outputMdPath;
+        $mdContent = <<<EOF
+**接口文档**
+---------------------------
+######
+EOF;
+        $mdContent .= PHP_EOL;
+        foreach ($data['item'] as $idx => $value) {
+            $tempIdx = $idx + 1;
+            $params = [];
+            if (isset($value['request']['url']['query'])) {
+                foreach ($value['request']['url']['query'] as $qVal) {
+                    if ($qVal['key'] == 'gid') {
+                        continue;
+                    }
+                    $params[] = $qVal['key'];
+                }
+            } elseif (isset($value['request']['body']['raw'])) {
+                $rawData = json_decode($value['request']['body']['raw'], true);
+                if (is_array($rawData)) {
+                    $params = array_keys($rawData);
+                    foreach ($params as $pIdx => $pVal) {
+                        if ($pVal == 'gid') {
+                            unset($params[$pIdx]);
+                        }
+                    }
+                }
+            }
+            //print_r($params);
+            $mdContent .= <<<EOF
+**{$tempIdx}. {$value['name']}   {$value['request']['method']}**
+
+|      字段         |   是否必填  |   参数值及说明              |
+| ----------------- | ---------- | ------------------------- |
+EOF;
+            $mdContent .= PHP_EOL;
+            foreach ($params as $pName) {
+                $mdContent .= <<<EOF
+| {$pName}            |    是      |                    |
+EOF;
+                $mdContent .= PHP_EOL;
+            }
+
+            $mdContent .= <<<EOF
+返回数据为json
+
+|      返回数据格式         |     参数值及说明              |
+| ----------------------- | ---------------------------  |
+|          code           | 错误码 : 200-成功 非200-失败   |
+|          message        | 信息 : 成功,失败              |
+|           data          | 数据                         |
+|          sys_time       | 系统时间 unix时间戳           |
+
+EOF;
+            $mdContent .= PHP_EOL;
+        }
+        file_put_contents($mdFile, $mdContent);
+    }
 }
