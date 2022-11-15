@@ -3,6 +3,7 @@
 namespace common\helpers;
 
 use Predis\Client;
+use yii\redis\Connection;
 
 class RedisTool
 {
@@ -14,12 +15,14 @@ class RedisTool
     public static function getInstance()
     {
         if (!isset(self::$instance)) {
-            $redisParams = \Yii::$app->params['redis'];
-            self::$instance = new Client([
-                'host' => $redisParams['host'],
-                'port' => $redisParams['port'],
-                'password' => $redisParams['password'],
-            ]);
+            $redisComponent = \Yii::$app->redis;
+            if ($redisComponent instanceof Connection) {
+                self::$instance = new Client([
+                    'host' => $redisComponent->hostname,
+                    'port' => $redisComponent->port,
+                    'password' => $redisComponent->password,
+                ]);
+            }
         }
 
         return self::$instance;

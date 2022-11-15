@@ -9,6 +9,7 @@ return [
     'components' => [
         'cache' => [
             'class' => 'yii\caching\FileCache',
+            //'class' => 'yii\redis\Cache', yii2_redis会将非规则key做md5!!!
         ],
     ],
     'language' => 'zh-CN'
