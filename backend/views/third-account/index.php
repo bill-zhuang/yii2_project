@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     'responsiveWrap' => false,
     'panel' => [
         'heading' => '<h3 class="panel-title">' . $this->title . '</h3>',
-        'type' => 'default',
+        'type' => 'info',
         'after' => false,
         'before' =>  Html::a('新建', ['create'], ['class' => 'btn btn-success pull-left']) ,
     ],

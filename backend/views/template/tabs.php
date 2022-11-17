@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
-<div class="panel panel-default">
+<div class="panel panel-info">
     <div class="panel-heading">
         <h3 class="panel-title"><?= $this->title ?></h3>
     </div>
@@ -61,11 +61,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="panel-footer">
-        <div class="kv-panel-pager">
-            <div id="config_ret"></div>
         </div>
     </div>
 </div>

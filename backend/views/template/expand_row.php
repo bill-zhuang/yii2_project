@@ -28,7 +28,7 @@ $this->registerJs(' $(document).ready(function () {
     'responsiveWrap' => false,
     'panel' => [
         'heading' => '<h3 class="panel-title">' . $this->title . '</h3>',
-        'type' => 'default',
+        'type' => 'info',
         'after' => false,
         'before' =>  '',
     ],
