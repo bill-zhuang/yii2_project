@@ -21,7 +21,7 @@ $js = "$(document).ready(function(){
 $this->registerJs($js, \yii\web\View::POS_END);
 
 ?>
-<?php \yii\widgets\Pjax::begin(['id' => 'pjax_result']) ?>
+<?php \yii\widgets\Pjax::begin(['id' => 'pjax_result', 'timeout' => 0]) ?>
     <?= GridView::widget([
         'id' => 'grid_result', //必须设置id，如果页面有多个gridview，同时用了pjax，会导致pjax刷新页面混乱
         'dataProvider' => $dataProvider,

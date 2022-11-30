@@ -50,7 +50,7 @@ $this->registerJs(' $(document).ready(function () {
             },
             'detailUrl' => \yii\helpers\Url::to(['expand-row-detail']),
             'headerOptions' => ['class' => 'kartik-sheet-style'],
-            'expandOneOnly' => false,
+            'expandOneOnly' => true, //false的话，多个同时打开会影响设置的key值
             'enableRowClick' => true,
             'allowBatchToggle' => false,
             'expandIcon' => '',
