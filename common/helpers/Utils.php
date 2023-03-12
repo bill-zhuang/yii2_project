@@ -2,6 +2,8 @@
 
 namespace common\helpers;
 
+use phpseclib3\Crypt\PublicKeyLoader;
+use phpseclib3\Math\BigInteger;
 use Yii;
 
 class Utils
@@ -141,6 +143,41 @@ class Utils
             'public_key' => $public_key,
             'private_key' => $private_key
         ];
+    }
+
+    public static function base64UrlEncode(string $input)
+    {
+        return str_replace('=', '', strtr(base64_encode($input), '+/', '-_'));
+    }
+
+    public static function base64UrlDecode(string $input)
+    {
+        $remainder = strlen($input) % 4;
+        if ($remainder) {
+            $addlen = 4 - $remainder;
+            $input .= str_repeat('=', $addlen);
+        }
+        return base64_decode(strtr($input, '-_', '+/'));
+    }
+
+    public static function verifyJwtSign(string $input, string $sign, string $key, string $alg = 'RS256')
+    {
+        $algConfig = array(
+            'RS256' => 'SHA256'
+        );
+        if (!isset($algConfig[$alg])) {
+            return false;
+        }
+        return openssl_verify($input, $sign, $key, 'SHA256' );
+    }
+
+    //返回类型必须带string 否则返回object对象
+    public static function jwk2Pem(array $jwk) : string
+    {
+        return  PublicKeyLoader::load([
+            'e' => new BigInteger(base64_decode($jwk['e']), 256),
+            'n' => new BigInteger(self::base64UrlDecode($jwk['n']), 256)
+        ]);
     }
 
     public static function postman2Md($postmanJsonPath, $outputMdPath)

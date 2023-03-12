@@ -42,7 +42,9 @@
         "phpoffice/phpexcel": "^1.8",
         "kucha/ueditor": "^1.21",
         "kop/yii2-scroll-pager": "^2.7",
-        "endroid/qr-code": "^4.0"
+        "endroid/qr-code": "^4.0",
+        "phpseclib/phpseclib": "~3.0",
+        "yiisoft/yii2-redis": "~2.0.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
@@ -59,6 +61,9 @@
         "process-timeout": 1800,
         "fxp-asset": {
             "enabled": false
+        },
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
         }
     },
     "repositories": [

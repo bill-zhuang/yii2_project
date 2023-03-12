@@ -27,4 +27,15 @@ class RedisTool
 
         return self::$instance;
     }
+
+    public static function getByKey($key)
+    {
+        $val = RedisTool::getInstance()->get($key);
+        return unserialize($val);
+    }
+
+    public static function delKeys(array $keys)
+    {
+        return self::getInstance()->del($keys);
+    }
 }
