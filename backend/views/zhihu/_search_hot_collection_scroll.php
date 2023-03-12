@@ -10,7 +10,7 @@ use yii\widgets\ActiveForm;
 ?>
 
 <?php $form = ActiveForm::begin([
-    'action' => ['index-scroll'],
+    'action' => ['hot-collection-scroll'],
     'method' => 'get',
     "options" => ['class' => 'form-inline', 'autocomplete' => 'off'],
     'fieldConfig' => [
@@ -27,7 +27,7 @@ use yii\widgets\ActiveForm;
     <?= Html::submitButton('查询', ['class' => 'btn btn-primary']) ?>
 </div>
 <div class="form-group">
-    <?= Html::a('重置', ['index-scroll'], ['data-pjax'=>0, 'class'=>'btn btn-default form-group'])?>
+    <?= Html::a('重置', ['hot-collection-scroll'], ['data-pjax'=>0, 'class'=>'btn btn-default form-group'])?>
 </div>
 
 <?php ActiveForm::end(); ?>

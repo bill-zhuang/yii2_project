@@ -5,18 +5,19 @@ use kartik\grid\GridView;
 use kucha\ueditor\UEditor;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\Search\ZhihuHotCollectionSearch */
+/* @var $searchModel backend\models\Search\ZhihuSaltSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $params array */
 
-$this->title = '知乎热门收藏';
+$this->title = '知乎盐选';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <script>
 function getDetail(content) {
     let editor = UE.getEditor('ueid');
-    editor.setContent(content);
+    editor.setContent(content.replaceAll('class="invisible"',
+        'class="invisible" style="display:none"'));
     //$('.modal-body').html(content);
     $('#mainModal').modal('show');
 }
@@ -34,7 +35,7 @@ function getDetail(content) {
     ],
     'toolbar' => [
         [
-            'content' => $this->render("_search", ['model' => $searchModel, 'params' => $params])
+            'content' => $this->render("_search_salt", ['model' => $searchModel, 'params' => $params])
         ],
         '{export}',
         '{toggleData}',
@@ -52,6 +53,9 @@ function getDetail(content) {
             'attribute' => 'abbr_answer',
             'hAlign' => GridView::ALIGN_CENTER,
             'vAlign' => GridView::ALIGN_MIDDLE,
+            'value' => function ($model) {
+                return urldecode($model->abbr_answer);
+            }
         ],
         [
             'header' => '回答url',

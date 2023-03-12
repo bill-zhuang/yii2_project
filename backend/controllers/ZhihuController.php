@@ -2,17 +2,12 @@
 
 namespace backend\controllers;
 
+use backend\models\Search\ZhihuSaltSearch;
 use Yii;
-use backend\models\ZhihuHotCollection;
 use backend\models\Search\ZhihuHotCollectionSearch;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
-/**
- * ZhihuHotCollectionController implements the CRUD actions for ZhihuHotCollection model.
- */
-class ZhihuHotCollectionController extends Controller
+class ZhihuController extends BkController
 {
     public function actions()
     {
@@ -32,14 +27,14 @@ class ZhihuHotCollectionController extends Controller
      * Lists all ZhihuHotCollection models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionHotCollection()
     {
         $params = Yii::$app->request->queryParams;
         $searchModel = new ZhihuHotCollectionSearch();
         $dataProvider = $searchModel->search($params);
         $dataProvider->sort = false;
 
-        return $this->render('index', [
+        return $this->render('hot-collection', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'params' => $params,
@@ -50,14 +45,14 @@ class ZhihuHotCollectionController extends Controller
      * Lists all ZhihuHotCollection models.
      * @return mixed
      */
-    public function actionIndexScroll()
+    public function actionHotCollectionScroll()
     {
         $params = Yii::$app->request->queryParams;
         $searchModel = new ZhihuHotCollectionSearch();
         $dataProvider = $searchModel->search($params);
         $dataProvider->sort = false;
 
-        return $this->render('index-scroll', [
+        return $this->render('hot-collection-scroll', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'params' => $params,
@@ -65,32 +60,38 @@ class ZhihuHotCollectionController extends Controller
     }
 
     /**
-     * Finds the ZhihuHotCollection model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return ZhihuHotCollection the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
+     * Lists all ZhihuSalt models.
+     * @return mixed
      */
-    protected function findModel($id)
+    public function actionSalt()
     {
-        if (($model = ZhihuHotCollection::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
+        $params = Yii::$app->request->queryParams;
+        $searchModel = new ZhihuSaltSearch();
+        $dataProvider = $searchModel->search($params);
+        $dataProvider->sort = false;
+
+        return $this->render('salt', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'params' => $params,
+        ]);
     }
 
-    protected function saveDuplicateAction($id)
+    /**
+     * Lists all ZhihuSalt models.
+     * @return mixed
+     */
+    public function actionSaltScroll()
     {
-        $ckOption = Yii::$app->request->post('ckOption');
-        if ($ckOption == 'view') {
-            return $this->redirect(['view', 'id' => $id]);
-        } elseif ($ckOption == 'create') {
-            return $this->redirect(['create']);
-        } elseif ($ckOption == 'update') {
-            return $this->redirect(['update', 'id' => $id]);
-        } else {
-            return $this->redirect(['view', 'id' => $id]);
-        }
+        $params = Yii::$app->request->queryParams;
+        $searchModel = new ZhihuSaltSearch();
+        $dataProvider = $searchModel->search($params);
+        $dataProvider->sort = false;
+
+        return $this->render('salt-scroll', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'params' => $params,
+        ]);
     }
 }
