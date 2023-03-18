@@ -84,7 +84,7 @@ class ThreePartyUtils
 
     public static function googleVerifyIdToken($idToken)
     {
-        $url = 'https://www.googleapis.com/oauth2/v3/userinfo?alt=json&access_token=' . $idToken;
+        $url = 'https://www.googleapis.com/oauth2/v3/userinfo?alt=json&id_token=' . $idToken;
         return CurlTools::getCurl($url);
     }
 
