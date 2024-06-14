@@ -97,4 +97,82 @@ class ThreePartyUtils
 
         return array();
     }
+
+    public static function xsollaPaymentUrl($userId, $productCode)
+    {
+        $mapCurrency = array( 'CN' => 'CNY', 'US' => 'USD', 'RU' => 'RUB', 'KZ' => 'KZT',);
+        //todo get product info by $productCode & create order
+        $productInfo = [];
+        if (empty($productInfo['product'])) {
+            return array('result' => 0, 'msg' => '订单创建失败');
+        }
+        $language = strtoupper($productInfo['product']['area']);
+        $xsollaProduct = $productInfo['product']['xsolla_code'];
+        $sandbox = (YII_ENV != YII_ENV_PROD);
+        $xsollaParams = array(
+            'purchase' => array(
+                'items' => array(
+                    array(
+                        'quantity' => 1,
+                        'sku' => $xsollaProduct,
+                    ),
+                ),
+            ),
+            'settings' => array(
+                'currency' => $mapCurrency[$language],
+                'external_id' => '',
+                //'language' => '',
+                //'payment_method' => '',
+                'return_url' => !$sandbox ? 'todo prod url' : 'todo alpha url',
+            ),
+            'user' => array(
+                'id' => array('value' => strval($userId)),
+                'country' => array('value' => $language, "allow_modify" => true),
+                //'phone' => array('value' => ''),
+                //'steam_id' => array('value' => '17 bits \d{17}'),
+                //'tracking_id' => array('value' => '32 bits [A-Za-z0-9]{32}'),
+            ),
+            'sandbox' => $sandbox,
+        );
+
+        $confXsolla = Yii::$app->params['xsolla'];
+        $pwd = $confXsolla['merchant_id'] .':' . $confXsolla['api_key'];
+        $url = sprintf($confXsolla['pay_token_url'], $confXsolla['project_id']);
+        //todo create order
+        $createRet = [];
+        if ($createRet['result']) {
+            $xsollaParams['settings']['external_id'] = $createRet['order_id'];
+            $retJson = self::xsollaPayPost($url, $xsollaParams, $pwd);
+            $retXsolla = json_decode($retJson, true);
+            if (isset($retXsolla['order_id'])) {
+                $payUrl = ($sandbox ? $confXsolla['sandbox_pay_url'] : $confXsolla['prod_pay_url']) . $retXsolla['token'];
+                return array('result' => 1, 'url' => $payUrl);
+            }
+            return array('result' => 0, 'msg' => '支付链接生成失败');
+        } else {
+            return array('result' => 0, 'msg' => '订单创建失败');
+        }
+    }
+
+    private static function xsollaPayPost($url, array $data, $password)
+    {
+        $data = json_encode($data);
+        $header = array(
+            'Content-Type: application/json'
+        );
+        $header[] = 'Authorization: Basic ' . base64_encode($password);
+        //
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        $return = curl_exec($ch);
+        curl_close($ch);
+
+        return $return;
+    }
 }
