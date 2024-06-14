@@ -243,4 +243,10 @@ EOF;
         }
         file_put_contents($mdFile, $mdContent);
     }
+
+    public static function isValidJson($jsonStr)
+    {
+        json_decode($jsonStr, true);
+        return (json_last_error() !== JSON_ERROR_NONE);
+    }
 }

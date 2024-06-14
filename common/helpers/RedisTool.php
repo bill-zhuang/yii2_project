@@ -38,4 +38,15 @@ class RedisTool
     {
         return self::getInstance()->del($keys);
     }
+
+    public static function getRankTop($key, $start, $end)
+    {
+        //第四个参数, array('withscores' => true) 返回 k => v
+        return RedisTool::getInstance()->zrevrange($key, $start, $end);
+    }
+
+    public static function hashDel($key, array $id)
+    {
+        RedisTool::getInstance()->hdel($key, $id);
+    }
 }
