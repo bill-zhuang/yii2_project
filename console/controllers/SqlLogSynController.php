@@ -10,7 +10,7 @@ class SqlLogSynController extends Controller
     public function actionDo()
     {
         $day = date('Y-m-d', strtotime(' - 1 day'));
-        $this->synLogByDate($day);
+        $this->loopDoDate($day);
     }
 
     public function actionHistory($doDate = '')
@@ -18,12 +18,27 @@ class SqlLogSynController extends Controller
         if (empty($doDate)) {
             $doDate = date('Y-m-d');
         }
-        $this->synLogByDate($doDate);
+        $this->loopDoDate($doDate);
     }
 
-    protected function synLogByDate($date)
+    protected function loopDoDate($doDate)
     {
-        $filePath = \Yii::getalias('@backend/runtime/logs/bk_sql_' . $date . '.log');
+        for ($i = 0; ; $i++) {
+            $postFix = '';
+            if ($i != 0) {//log文件大小超限后 以原有文件名+'.数字'生成
+                $postFix = ".{$i}";
+            }
+            $filePath = \Yii::getalias('@backend/runtime/logs/bk_sql_' . $doDate . '.log' . $postFix);
+            if (!file_exists($filePath)) {
+                break;
+            }
+            $this->synLogByDate($filePath);
+        }
+    }
+
+    protected function synLogByDate($filePath)
+    {
+        //$filePath = \Yii::getalias('@backend/runtime/logs/bk_sql_' . $date . '.log');
         if (!file_exists($filePath)) {
             echo 'log file not exist. ' . $filePath;
         }
