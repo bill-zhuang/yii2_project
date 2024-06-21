@@ -22,7 +22,7 @@ CREATE TABLE `calendar_event` (
   `end_time` varchar(8) NOT NULL DEFAULT '' COMMENT '结束时间',
   `status` tinyint(2) unsigned NOT NULL DEFAULT '1' COMMENT '1-有效；2-无效',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `update_time` datetime DEFAULT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `idx_start_date_time` (`start_date`,`start_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='日历';

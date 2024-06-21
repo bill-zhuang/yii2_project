@@ -21,7 +21,7 @@ CREATE TABLE `zhihu_salt` (
   `answer_url` varchar(128) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '回答url',
   `status` tinyint(2) unsigned NOT NULL DEFAULT '1' COMMENT '1-有效；2-无效',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `update_time` datetime DEFAULT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `idx_answer_url` (`answer_url`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='知乎盐选表';

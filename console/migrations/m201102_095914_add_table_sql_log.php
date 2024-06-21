@@ -24,7 +24,7 @@ CREATE TABLE `sql_log` (
   `detail` text NOT NULL COMMENT '操作说明',
   `status` tinyint(2) unsigned NOT NULL DEFAULT '1' COMMENT '1-有效；2-无效',
   `create_time` int(11) unsigned NOT NULL COMMENT '创建时间',
-  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `update_time` datetime DEFAULT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `idx_urid` (`urid`) USING BTREE,
   KEY `idx_create_time` (`create_time`) USING BTREE,

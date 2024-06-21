@@ -23,7 +23,7 @@ CREATE TABLE `zhihu_hot_collection` (
   `is_recommend` tinyint(4) NOT NULL DEFAULT '1' COMMENT '1-待处理 2-推荐 3-不推荐',
   `status` tinyint(2) unsigned NOT NULL DEFAULT '1' COMMENT '1-有效；2-无效',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `update_time` datetime DEFAULT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `idx_answer_url` (`answer_url`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='知乎热门收藏表';
