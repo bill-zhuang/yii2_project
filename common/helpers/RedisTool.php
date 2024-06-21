@@ -34,6 +34,14 @@ class RedisTool
         return unserialize($val);
     }
 
+    public static function setByKey($key, $value, $exp = 3600)
+    {
+        if (is_object($value) || is_array($value)) {
+            $value = serialize($value);
+        }
+        return RedisTool::getInstance()->setex($key, $exp, $value);
+    }
+
     public static function delKeys(array $keys)
     {
         return self::getInstance()->del($keys);
