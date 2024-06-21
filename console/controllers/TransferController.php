@@ -103,6 +103,21 @@ class TransferController extends Controller
                 $sqlite2MysqlDriver->createCommand()->insert($subTblName, $mapVal)->execute();
             }
         }
+        //
+        $tblName = 'note';
+        $sql = 'select * from ' . $tblName;
+        if (!empty($startDate)) {
+            $sql .= " where create_time>='{$startDate} 00:00:00'";
+        }
+        $noteData = $sqliteDriver->createCommand($sql)->queryAll();
+        foreach ($noteData as $noteVal) {
+            unset($noteVal['nid']);
+            $querySql = "select * from {$tblName} where create_time='{$noteVal['create_time']}'";
+            $exist = $sqlite2MysqlDriver->createCommand($querySql)->queryOne();
+            if (empty($exist)) {
+                $sqlite2MysqlDriver->createCommand()->insert($tblName, $noteVal)->execute();
+            }
+        }
     }
 
     private function transferMysql2Sqlite()
@@ -125,6 +140,7 @@ class TransferController extends Controller
         $sqliteDriver->createCommand()->delete('finance_category')->execute();
         $sqliteDriver->createCommand()->delete('finance_payment')->execute();
         $sqliteDriver->createCommand()->delete('finance_payment_map')->execute();
+        $sqliteDriver->createCommand()->delete('note')->execute();
         //
         $tblName = 'finance_category';
         $sql = 'select * from ' . $tblName;
@@ -160,6 +176,13 @@ class TransferController extends Controller
         $ejectData = $sqlite2MysqlDriver->createCommand($sql)->queryAll();
         foreach ($ejectData as $ejectVal) {
             $sqliteDriver->createCommand()->insert($tblName, $ejectVal)->execute();
+        }
+        //
+        $tblName = 'note';
+        $sql = 'select * from ' . $tblName;
+        $noteData = $sqlite2MysqlDriver->createCommand($sql)->queryAll();
+        foreach ($noteData as $noteVal) {
+            $sqliteDriver->createCommand()->insert($tblName, $noteVal)->execute();
         }
     }
 }
