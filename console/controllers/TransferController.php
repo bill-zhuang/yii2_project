@@ -80,7 +80,7 @@ class TransferController extends Controller
         $tblName = 'finance_payment';
         $sql = 'select * from ' . $tblName;
         if (!empty($startDate)) {
-            $sql .= " where payment_date>='{$startDate}'";
+            $sql .= " where create_time>='{$startDate} 00:00:00'";
         }
         $paymentData = $sqliteDriver->createCommand($sql)->queryAll();
         foreach ($paymentData as $paymentVal) {
