@@ -49,7 +49,14 @@ class TransferController extends Controller
                                 ->one();
                             if (!isset($exist)) {
                                 unset($item['id']);
-                                (new $modelClass())->insert($item);
+                                try {
+                                    $model = new $modelClass();
+                                    $model->load($item, '');
+                                    $model->save();
+                                } catch (\Exception $e) {
+                                    echo $e->getMessage();
+                                    echo $e->getTraceAsString();
+                                }
                             } else {
                                 echo 'Answer url exist, continue. Pkid=' . $item['id'] . PHP_EOL;
                             }
