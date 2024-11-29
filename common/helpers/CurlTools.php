@@ -27,7 +27,7 @@ class CurlTools
         return $output;
     }
 
-    public static function getCurl($url)
+    public static function getCurl($url, array $headers = [])
     {
         $handle = curl_init();
         if ($handle === false) {
@@ -37,6 +37,9 @@ class CurlTools
         curl_setopt($handle, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($handle, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($handle, CURLOPT_SSL_VERIFYHOST, false);
+        if (!empty($headers)) {
+            curl_setopt($handle, CURLOPT_HTTPHEADER, $headers);
+        }
         $output = curl_exec($handle);
         curl_close($handle);
         return $output;

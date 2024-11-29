@@ -4,6 +4,9 @@
 namespace console\controllers;
 
 
+use common\helpers\CurlTools;
+use common\models\ZhihuHotCollection;
+use common\models\ZhihuSalt;
 use yii\console\Controller;
 use yii\db\Connection;
 use Yii;
@@ -18,6 +21,45 @@ class TransferController extends Controller
     public function actionDo2App()
     {
         $this->transferMysql2Sqlite();
+    }
+
+    public function actionSyncZhihu()
+    {
+        $confSyncZhihu = Yii::$app->params['sync_zhihu'];
+        $url = $confSyncZhihu['addr'];
+        $header = array(
+            'Authorization: Bearer ' . $confSyncZhihu['token'],
+        );
+        $map = array('hot' => ZhihuHotCollection::class, 'salt' => ZhihuSalt::class);
+        $mapPage = array('hot' => 1, 'salt' => 1);
+        foreach ($map as $type => $modelClass) {
+            $page = $mapPage[$type];
+            while (true) {
+                $params = array('type' => $type, 'limit' => 100, 'page' => $page);
+                $data = CurlTools::getCurl($url . '?' . http_build_query($params), $header);
+                $decode = json_decode($data, true);
+                if (isset($decode['code']) && ($decode['code'] == 200)) {
+                    if (empty($decode['data'])) {
+                        break;
+                    } else {
+                        $page++;
+                        foreach ($decode['data'] as $item) {
+                            $exist = $modelClass::find()
+                                ->where(['answer_url' => $item['answer_url']])
+                                ->one();
+                            if (!isset($exist)) {
+                                unset($item['id']);
+                                (new $modelClass())->insert($item);
+                            } else {
+                                echo 'Answer url exist, continue. Pkid=' . $item['id'] . PHP_EOL;
+                            }
+                        }
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
     }
 
     private function transferSqlite2Mysql($startDate)
