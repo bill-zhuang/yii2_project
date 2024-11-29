@@ -160,7 +160,7 @@ class Utils
         return base64_decode(strtr($input, '-_', '+/'));
     }
 
-    public static function verifyJwtSign(string $input, string $sign, string $key, string $alg = 'RS256')
+    public static function verifyJwtSign($input, $sign, $key, $alg = 'RS256')
     {
         $algConfig = array(
             'RS256' => 'SHA256'
@@ -172,7 +172,7 @@ class Utils
     }
 
     //返回类型必须带string 否则返回object对象
-    public static function jwk2Pem(array $jwk) : string
+    public static function jwk2Pem(array $jwk)
     {
         return  PublicKeyLoader::load([
             'e' => new BigInteger(base64_decode($jwk['e']), 256),
