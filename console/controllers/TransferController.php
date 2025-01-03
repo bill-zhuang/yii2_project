@@ -96,6 +96,21 @@ class TransferController extends Controller
             exit;
         }
         //
+        $tblName = 'finance_category';
+        $sql = 'select * from ' . $tblName;
+        if (!empty($startDate)) {
+            $sql .= " where create_time>='{$startDate}'";
+        }
+        $categoryData = $sqliteDriver->createCommand($sql)->queryAll();
+        foreach ($categoryData as $categoryVal) {
+            unset($categoryVal['fcid']);
+            $querySql = "select * from {$tblName} where create_time='{$categoryVal['create_time']}'";
+            $exist = $sqlite2MysqlDriver->createCommand($querySql)->queryOne();
+            if (empty($exist)) {
+                $sqlite2MysqlDriver->createCommand()->insert($tblName, $categoryVal)->execute();
+            }
+        }
+        //
         $tblName = 'grain_recycle_history';
         $sql = 'select * from ' . $tblName;
         if (!empty($startDate)) {
